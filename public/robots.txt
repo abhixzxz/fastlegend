@@ -1,0 +1,26 @@
+# FastLegend Robots.txt - Typing Speed Test Application
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/private
+Disallow: /.next
+Disallow: /node_modules
+
+# Specific rules for Googlebot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Specific rules for Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://fastlegend.vercel.app/sitemap.xml
+
+# Crawl delay for other bots
+Crawl-delay: 1
+Request-rate: 1/1s
