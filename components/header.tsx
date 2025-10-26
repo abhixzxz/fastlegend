@@ -1,9 +1,11 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { SettingsIcon, User, Zap, Moon, Sun, Palette } from "lucide-react"
-import { useThemeStore, type Theme } from "@/lib/store"
-import { useState } from "react"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { SettingsIcon, User, Moon, Sun, Palette, Trophy } from "lucide-react";
+import { useThemeStore, type Theme } from "@/lib/store";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const THEMES: { id: Theme; label: string }[] = [
   { id: "spotify", label: "Spotify" },
@@ -11,31 +13,43 @@ const THEMES: { id: Theme; label: string }[] = [
   { id: "sunset", label: "Sunset" },
   { id: "forest", label: "Forest" },
   { id: "cyberpunk", label: "Cyberpunk" },
-]
+];
 
 export default function Header() {
-  const { theme, colorMode, setTheme, setColorMode } = useThemeStore()
-  const [showThemeMenu, setShowThemeMenu] = useState(false)
-  const [showColorMode, setShowColorMode] = useState(false)
+  const { theme, colorMode, setTheme, setColorMode } = useThemeStore();
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [showColorMode, setShowColorMode] = useState(false);
+  const router = useRouter();
+
+  const handleProfileClick = () => {
+    router.push('/leaderboard');
+  };
 
   return (
     <header className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <motion.div
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 cursor-pointer"
+          onClick={() => (window.location.href = "/")}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
           <motion.div
-            className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center shadow-lg"
+            className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Zap size={24} className="text-primary-foreground" />
+            <Image
+              src="/logo.webp"
+              alt="FastLegend Logo"
+              width={40}
+              height={40}
+              className="rounded-lg"
+            />
           </motion.div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold text-white from-primary to-accent bg-clip-text text-transparent">
               FastLegend
             </h1>
             <p className="text-xs text-muted-foreground">Typing Speed Test</p>
@@ -55,7 +69,10 @@ export default function Header() {
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowThemeMenu(!showThemeMenu)}
             >
-              <Palette size={20} className="text-muted-foreground hover:text-primary" />
+              <Palette
+                size={20}
+                className="text-muted-foreground hover:text-primary"
+              />
             </motion.button>
             {showThemeMenu && (
               <motion.div
@@ -67,11 +84,13 @@ export default function Header() {
                   <button
                     key={t.id}
                     onClick={() => {
-                      setTheme(t.id)
-                      setShowThemeMenu(false)
+                      setTheme(t.id);
+                      setShowThemeMenu(false);
                     }}
                     className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                      theme === t.id ? "bg-primary/20 text-primary" : "hover:bg-muted text-foreground"
+                      theme === t.id
+                        ? "bg-primary/20 text-primary"
+                        : "hover:bg-muted text-foreground"
                     }`}
                   >
                     {t.label}
@@ -89,9 +108,15 @@ export default function Header() {
               onClick={() => setShowColorMode(!showColorMode)}
             >
               {colorMode === "dark" ? (
-                <Moon size={20} className="text-muted-foreground hover:text-primary" />
+                <Moon
+                  size={20}
+                  className="text-muted-foreground hover:text-primary"
+                />
               ) : (
-                <Sun size={20} className="text-muted-foreground hover:text-primary" />
+                <Sun
+                  size={20}
+                  className="text-muted-foreground hover:text-primary"
+                />
               )}
             </motion.button>
             {showColorMode && (
@@ -104,11 +129,13 @@ export default function Header() {
                   <button
                     key={mode}
                     onClick={() => {
-                      setColorMode(mode as any)
-                      setShowColorMode(false)
+                      setColorMode(mode as any);
+                      setShowColorMode(false);
                     }}
                     className={`w-full text-left px-4 py-2 rounded-lg transition-colors capitalize ${
-                      colorMode === mode ? "bg-primary/20 text-primary" : "hover:bg-muted text-foreground"
+                      colorMode === mode
+                        ? "bg-primary/20 text-primary"
+                        : "hover:bg-muted text-foreground"
                     }`}
                   >
                     {mode}
@@ -123,17 +150,24 @@ export default function Header() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <SettingsIcon size={20} className="text-muted-foreground hover:text-primary" />
+            <SettingsIcon
+              size={20}
+              className="text-muted-foreground hover:text-primary"
+            />
           </motion.button>
           <motion.button
             className="p-2 hover:bg-muted rounded-lg transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleProfileClick}
           >
-            <User size={20} className="text-muted-foreground hover:text-primary" />
+            <Trophy
+              size={20}
+              className="text-muted-foreground hover:text-primary"
+            />
           </motion.button>
         </motion.div>
       </div>
     </header>
-  )
+  );
 }

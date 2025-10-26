@@ -11,6 +11,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const root = document.documentElement
 
+    // Apply theme
     root.setAttribute("data-theme", theme)
 
     // Determine actual color mode
@@ -19,10 +20,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       actualMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
     }
 
+    // Ensure only one mode class is present at a time
+    root.classList.remove("dark", "light")
     if (actualMode === "dark") {
       root.classList.add("dark")
     } else {
-      root.classList.remove("dark")
+      root.classList.add("light")
     }
   }, [theme, colorMode])
 

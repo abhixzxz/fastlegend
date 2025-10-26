@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@fontsource/bitcount-grid-single";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -133,24 +134,20 @@
   --chart-5: #b5179e;
 }
 
+/* Dark mode only affects surface colors, not theme primary/accent/chart */
 .dark {
   --background: #0f0f0f;
   --foreground: #ffffff;
   --card: #1a1a1a;
   --card-foreground: #ffffff;
-  --primary: #1db954;
-  --primary-foreground: #000000;
   --secondary: #191414;
   --secondary-foreground: #ffffff;
   --muted: #282828;
   --muted-foreground: #b3b3b3;
-  --accent: #1ed760;
-  --accent-foreground: #000000;
   --destructive: #e74c3c;
   --destructive-foreground: #ffffff;
   --border: #282828;
   --input: #282828;
-  --ring: #1db954;
 }
 
 .light {
@@ -158,14 +155,10 @@
   --foreground: #0f0f0f;
   --card: #f5f5f5;
   --card-foreground: #0f0f0f;
-  --primary: #1db954;
-  --primary-foreground: #ffffff;
   --secondary: #e8e8e8;
   --secondary-foreground: #0f0f0f;
   --muted: #d0d0d0;
   --muted-foreground: #666666;
-  --accent: #1ed760;
-  --accent-foreground: #ffffff;
   --destructive: #e74c3c;
   --destructive-foreground: #ffffff;
   --border: #e0e0e0;
@@ -199,9 +192,20 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+}
+
+:root {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
+
+  .font-bitcount {
+    font-family: "Bitcount Grid Single", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400; /* Assuming a default weight, adjust if needed */
+    font-style: normal;
+    font-variation-settings: "slnt" 0, "CRSV" 0.5, "ELSH" 0, "ELXP" 0;
+  }
   --radius-xl: calc(var(--radius) + 4px);
   --color-sidebar: var(--background);
   --color-sidebar-foreground: var(--foreground);
@@ -211,6 +215,18 @@
   --color-sidebar-accent-foreground: var(--accent-foreground);
   --color-sidebar-border: var(--border);
   --color-sidebar-ring: var(--ring);
+}
+
+.play-regular {
+  font-family: "Play", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.play-bold {
+  font-family: "Play", sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
 @layer base {
@@ -322,7 +338,12 @@
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
   background-size: 1000px 100%;
 }
 
