@@ -51,11 +51,11 @@ export const metadata: Metadata = {
     siteName: "FastLegend",
     images: [
       {
-        url: "https://fastlegend.vercel.app/og-image.png",
+        url: "https://fastlegend.vercel.app/logo.webp",
         width: 1200,
         height: 630,
         alt: "FastLegend Typing Speed Test",
-        type: "image/png",
+        type: "image/webp",
       },
     ],
     type: "website",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FastLegend - Free Typing Speed Test",
     description: "Test your typing speed and improve your skills with beautiful animations and detailed analytics.",
-    images: ["https://fastlegend.vercel.app/og-image.png"],
+    images: ["https://fastlegend.vercel.app/logo.webp"],
     creator: "@fastlegend",
   },
   viewport: {
@@ -97,8 +97,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#1db954" />
         <meta name="apple-mobile-web-app-capable" content="true" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/logo.webp" />
+        <link rel="shortcut icon" href="/logo.webp" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="/logo.webp" />
         <link rel="canonical" href="https://fastlegend.vercel.app" />
         <link rel="manifest" href="/manifest.json" />
 
@@ -134,7 +135,7 @@ export default function RootLayout({
               "@type": "Organization",
               name: "FastLegend",
               url: "https://fastlegend.vercel.app",
-              logo: "https://fastlegend.vercel.app/logo.png",
+              logo: "https://fastlegend.vercel.app/logo.webp",
               sameAs: ["https://twitter.com/fastlegend", "https://github.com/fastlegend"],
             }),
           }}

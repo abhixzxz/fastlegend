@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/header";
 import TypingTest from "@/components/typing-test";
 import ResultsScreen from "@/components/results-screen";
 import Settings from "@/components/settings";
+import UserProfilePopup from "@/components/user-profile-popup";
 
 export default function Home() {
   const [testState, setTestState] = useState<"idle" | "typing" | "results">(
@@ -16,6 +17,24 @@ export default function Home() {
     mode: "time" as const,
   });
   const [results, setResults] = useState<any>(null);
+
+  // Clear old localStorage format on first load
+  useEffect(() => {
+    const oldData = localStorage.getItem('user-preferences');
+    if (oldData) {
+      try {
+        const parsed = JSON.parse(oldData);
+        // Check if it's the old format (has userName instead of userProfile)
+        if (parsed.state && parsed.state.userName !== undefined) {
+          // Clear the old format
+          localStorage.removeItem('user-preferences');
+        }
+      } catch (e) {
+        // If parsing fails, clear the corrupted data
+        localStorage.removeItem('user-preferences');
+      }
+    }
+  }, []);
 
   const handleStartTest = (config: any) => {
     setTestConfig(config);
@@ -39,6 +58,7 @@ export default function Home() {
         content="86qviRUa8WRVue3dDj0XZ1Y7shbOMUTnui-bzmSPJ5g"
       />
       <Header />
+      <UserProfilePopup />
 
       <div className="container mx-auto px-4 py-8 md:py-16">
         <AnimatePresence mode="wait">

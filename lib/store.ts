@@ -36,7 +36,7 @@ const defaultStats: UserStats = {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: "spotify",
+      theme: "ocean",
       colorMode: "dark",
       setTheme: (theme) => set({ theme }),
       setColorMode: (colorMode) => set({ colorMode }),

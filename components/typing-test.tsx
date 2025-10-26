@@ -22,11 +22,15 @@ export default function TypingTest({ config, onComplete }: TypingTestProps) {
   const [isActive, setIsActive] = useState(true)
   const [isPaused, setIsPaused] = useState(false)
   const [startTime, setStartTime] = useState(Date.now())
+  const [wpmHistory, setWpmHistory] = useState<number[]>([])
+  const [errorHistory, setErrorHistory] = useState<number[]>([])
+  const [currentPhraseHistory, setCurrentPhraseHistory] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Generate initial phrase
   useEffect(() => {
-    setPhrase(generatePhrase(config.duration))
+    // Always use long phrases for better practice
+    setPhrase(generatePhrase(120))
   }, [config.duration])
 
   // Timer effect
@@ -46,13 +50,41 @@ export default function TypingTest({ config, onComplete }: TypingTestProps) {
     return () => clearInterval(timer)
   }, [isActive, timeLeft, isPaused])
 
+  // Collect real-time data for charts
+  useEffect(() => {
+    if (!isActive || isPaused) return
+
+    const dataInterval = setInterval(() => {
+      const currentTime = Date.now() - startTime
+      const currentStats = calculateStats(input, phrase, currentTime, config.mode)
+      
+      setWpmHistory(prev => [...prev, currentStats.wpm])
+      setErrorHistory(prev => [...prev, currentStats.errors])
+    }, 1000)
+
+    return () => clearInterval(dataInterval)
+  }, [isActive, isPaused, input, phrase, startTime, config.mode])
+
   // Handle test completion
   useEffect(() => {
     if (!isActive && timeLeft === 0) {
-      const stats = calculateStats(input, phrase, Date.now() - startTime, config.mode)
-      onComplete(stats)
+      const finalTime = Date.now() - startTime
+      const stats = calculateStats(input, phrase, finalTime, config.mode)
+      
+      // Create real chart data
+      const chartData = wpmHistory.map((wpm, index) => ({
+        time: index + 1,
+        wpm: Math.max(0, wpm),
+        errors: errorHistory[index] || 0
+      }))
+      
+      onComplete({
+        ...stats,
+        chartData,
+        phrasesUsed: currentPhraseHistory
+      })
     }
-  }, [isActive, timeLeft])
+  }, [isActive, timeLeft, input, phrase, startTime, config.mode, onComplete, wpmHistory, errorHistory, currentPhraseHistory])
 
   // Focus input on mount
   useEffect(() => {
@@ -65,7 +97,9 @@ export default function TypingTest({ config, onComplete }: TypingTestProps) {
 
     // Generate new phrase when current is completed
     if (e.length > 0 && e.trim() === phrase.trim()) {
-      setPhrase(generatePhrase(config.duration))
+      const newPhrase = generatePhrase(120)
+      setCurrentPhraseHistory(prev => [...prev, phrase])
+      setPhrase(newPhrase)
       setInput("")
     }
   }
@@ -76,7 +110,10 @@ export default function TypingTest({ config, onComplete }: TypingTestProps) {
     setIsActive(true)
     setIsPaused(false)
     setStartTime(Date.now())
-    setPhrase(generatePhrase(config.duration))
+    setPhrase(generatePhrase(120))
+    setWpmHistory([])
+    setErrorHistory([])
+    setCurrentPhraseHistory([])
     inputRef.current?.focus()
   }
 
@@ -146,7 +183,7 @@ export default function TypingTest({ config, onComplete }: TypingTestProps) {
       >
         {/* Display Text */}
         <motion.div
-          className="mb-8 text-xl md:text-2xl leading-relaxed font-mono text-muted-foreground min-h-32"
+          className="mb-8 text-xl md:text-2xl leading-relaxed font-mono text-muted-foreground min-h-32 whitespace-pre-wrap break-words overflow-y-auto max-h-48 md:max-h-64 pr-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -175,7 +212,7 @@ export default function TypingTest({ config, onComplete }: TypingTestProps) {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.1 }}
               >
-                {char === " " ? "·" : char}
+                {char}
               </motion.span>
             )
           })}
