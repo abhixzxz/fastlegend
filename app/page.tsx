@@ -41,9 +41,31 @@ export default function Home() {
     setTestState("typing");
   };
 
-  const handleTestComplete = (testResults: any) => {
+  const handleTestComplete = async (testResults: any) => {
     setResults(testResults);
     setTestState("results");
+    
+    // Save stats to backend
+    try {
+      const response = await fetch("http://localhost:5002/api/users/stats", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wpm: testResults.wpm,
+          accuracy: testResults.accuracy,
+          time: testResults.time,
+        }),
+      });
+      
+      if (!response.ok) {
+        console.error("Failed to save stats to backend:", response.status);
+      }
+    } catch (error) {
+      console.error("Error saving stats to backend:", error);
+    }
   };
 
   const handleRetry = () => {
