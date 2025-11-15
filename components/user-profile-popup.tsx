@@ -17,7 +17,7 @@ export default function UserProfilePopup() {
   const API_BASE =
     (typeof process !== "undefined" &&
       (process as any).env?.NEXT_PUBLIC_API_URL) ||
-    "http://localhost:5002";
+    "https://fastlegendbackend.onrender.com";
 
   // More defensive initialization
   useEffect(() => {

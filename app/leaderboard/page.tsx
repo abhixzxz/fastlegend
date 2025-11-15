@@ -23,7 +23,7 @@ interface LeaderboardEntry {
 const API_BASE =
   (typeof process !== "undefined" &&
     (process as any).env?.NEXT_PUBLIC_API_URL) ||
-  "http://localhost:5002";
+  "https://fastlegendbackend.onrender.com";
 
 export default function LeaderboardPage() {
   const { userProfile, bestWPM, bestAccuracy, totalTests } =
@@ -209,7 +209,8 @@ export default function LeaderboardPage() {
                     No Scores Yet
                   </h3>
                   <p className="text-muted-foreground">
-                    Be the first to complete a typing test and appear on the leaderboard!
+                    Be the first to complete a typing test and appear on the
+                    leaderboard!
                   </p>
                 </div>
               ) : (

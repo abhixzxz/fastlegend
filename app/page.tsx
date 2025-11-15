@@ -47,7 +47,7 @@ export default function Home() {
     
     // Save stats to backend
     try {
-      const response = await fetch("http://localhost:5002/api/users/stats", {
+      const response = await fetch("https://fastlegendbackend.onrender.com/api/users/stats", {
         method: "PUT",
         credentials: "include",
         headers: {
